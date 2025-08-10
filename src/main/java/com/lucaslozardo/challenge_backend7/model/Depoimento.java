@@ -1,6 +1,7 @@
 package com.lucaslozardo.challenge_backend7.model;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ public class Depoimento {
     private String depoimento;
     private String urlFoto;
 
+    @Autowired
     public Depoimento(){
     }
 

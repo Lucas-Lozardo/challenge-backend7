@@ -1,0 +1,50 @@
+package com.lucaslozardo.challenge_backend7.service;
+
+import com.lucaslozardo.challenge_backend7.dto.DepoimentoDTO;
+import com.lucaslozardo.challenge_backend7.model.Depoimento;
+import com.lucaslozardo.challenge_backend7.repository.DepoimentoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class DepoimentoService {
+
+    @Autowired
+    private DepoimentoRepository repository;
+
+    public List<DepoimentoDTO> converteDadosDTO(List<Depoimento> depoimentos){
+        return depoimentos.stream()
+                .map(d -> new DepoimentoDTO(d.getId(), d.getName(), d.getDepoimento(), d.getUrlFoto()))
+                .collect(Collectors.toList());
+    }
+
+    //GET ALL
+    public List<DepoimentoDTO> obterTodosOsDepoimentos(){
+        return converteDadosDTO(repository.findAll());
+    }
+
+    //GET FOR ID
+    public DepoimentoDTO obterDepoimentoPorId(Long id){
+        Optional<Depoimento> depoimento = repository.findById(id);
+
+        if (depoimento.isPresent()){
+            Depoimento d = depoimento.get();
+            return new DepoimentoDTO(d.getId(),
+                    d.getName(),
+                    d.getDepoimento(),
+                    d.getUrlFoto());
+        } else {
+            return null;
+        }
+    }
+
+    // GET FOR NAME
+    public List<DepoimentoDTO> obterDepoimentosPorNome(String name){
+        return converteDadosDTO(repository.findByNameContainingIgnoringCase(name));
+    }
+
+}
