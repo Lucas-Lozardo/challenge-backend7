@@ -6,6 +6,7 @@ import com.lucaslozardo.challenge_backend7.repository.DepoimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,6 +46,23 @@ public class DepoimentoService {
     // GET FOR NAME
     public List<DepoimentoDTO> obterDepoimentosPorNome(String name){
         return converteDadosDTO(repository.findByNameContainingIgnoringCase(name));
+    }
+
+    // DELETE ALL
+    public void apagarTodosOsDepoimentos(){
+        repository.deleteAll();
+    }
+
+    // DELETE FOR ID
+    public void apagarDepoimentoporId(Long id){
+        Optional<Depoimento> depoimento = repository.findById(id);
+        depoimento.ifPresent(repository::delete);
+    }
+
+    // DELETE FOR NAME
+    public void apagarDepoimentosPorNome(String name){
+        List<Depoimento> depoimentos = repository.findByNameContainingIgnoringCase(name);
+        repository.deleteAll(depoimentos);
     }
 
 }
