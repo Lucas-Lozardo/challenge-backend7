@@ -20,8 +20,7 @@ public class Depoimento {
     public Depoimento(){
     }
 
-    public Depoimento(Long id, String name, String depoimento, String urlFoto){
-        this.id = id;
+    public Depoimento(String name, String depoimento, String urlFoto){
         this.name = name;
         this.depoimento = depoimento;
         this .urlFoto = urlFoto;

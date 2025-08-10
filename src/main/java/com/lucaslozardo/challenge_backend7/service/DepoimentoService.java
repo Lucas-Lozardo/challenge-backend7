@@ -54,7 +54,7 @@ public class DepoimentoService {
     }
 
     // DELETE FOR ID
-    public void apagarDepoimentoporId(Long id){
+    public void apagarDepoimentoPorId(Long id){
         Optional<Depoimento> depoimento = repository.findById(id);
         depoimento.ifPresent(repository::delete);
     }
@@ -64,5 +64,14 @@ public class DepoimentoService {
         List<Depoimento> depoimentos = repository.findByNameContainingIgnoringCase(name);
         repository.deleteAll(depoimentos);
     }
+
+    // POST DEPOIMENTO
+    public Depoimento InserirNovoDepoimento (DepoimentoDTO dto){
+        Depoimento novoDepoimento = new Depoimento(dto.name(), dto.depoimento(), dto.urlFoto());
+        return repository.save(novoDepoimento);
+    }
+
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.lucaslozardo.challenge_backend7.controller;
 
 import com.lucaslozardo.challenge_backend7.dto.DepoimentoDTO;
+import com.lucaslozardo.challenge_backend7.model.Depoimento;
 import com.lucaslozardo.challenge_backend7.service.DepoimentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +37,17 @@ public class DepoimentoController {
 
     @DeleteMapping("/{id}")
     public void apagarDepoimentoPorId(@PathVariable Long id){
-        depoimentoService.apagarDepoimentoporId(id);
+        depoimentoService.apagarDepoimentoPorId(id);
     }
 
     @DeleteMapping("/nome/{name}")
-    public void apagarDepoimentosPorNome(String name){
+    public void apagarDepoimentosPorNome(@PathVariable String name){
         depoimentoService.apagarDepoimentosPorNome(name);
     }
 
+    @PostMapping
+    public DepoimentoDTO InserirDepoimento(@RequestBody DepoimentoDTO dto){
+        Depoimento depoimentoSalvo = depoimentoService.InserirNovoDepoimento(dto);
+        return new DepoimentoDTO(depoimentoSalvo);
+    }
 }
