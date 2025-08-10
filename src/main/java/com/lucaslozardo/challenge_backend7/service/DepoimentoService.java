@@ -71,6 +71,23 @@ public class DepoimentoService {
         return repository.save(novoDepoimento);
     }
 
+    // PUT DEPOIMENTO
+    public DepoimentoDTO atualizarDepoimento(Long id, DepoimentoDTO dto){
+        Optional<Depoimento> depoimentoExistente = repository.findById(id);
+
+        if (depoimentoExistente.isPresent()){
+            Depoimento d = depoimentoExistente.get();
+            d.setName(dto.name());
+            d.setDepoimento(dto.depoimento());
+            d.setUrlFoto(dto.urlFoto());
+
+            Depoimento atualizado = repository.save(d);
+            return new DepoimentoDTO(atualizado);
+        } else {
+            return null;
+        }
+
+    }
 
 
 

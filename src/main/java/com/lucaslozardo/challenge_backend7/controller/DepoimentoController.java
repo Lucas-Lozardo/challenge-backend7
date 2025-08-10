@@ -4,6 +4,8 @@ import com.lucaslozardo.challenge_backend7.dto.DepoimentoDTO;
 import com.lucaslozardo.challenge_backend7.model.Depoimento;
 import com.lucaslozardo.challenge_backend7.service.DepoimentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,8 +48,22 @@ public class DepoimentoController {
     }
 
     @PostMapping
-    public DepoimentoDTO InserirDepoimento(@RequestBody DepoimentoDTO dto){
+    public ResponseEntity<DepoimentoDTO> inserirDepoimento(@RequestBody DepoimentoDTO dto){
         Depoimento depoimentoSalvo = depoimentoService.InserirNovoDepoimento(dto);
-        return new DepoimentoDTO(depoimentoSalvo);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new DepoimentoDTO(depoimentoSalvo));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DepoimentoDTO> atualizarDepoimento(@PathVariable Long id, @RequestBody DepoimentoDTO dto){
+        DepoimentoDTO atualizado = depoimentoService.atualizarDepoimento(id, dto);
+
+        if (atualizado != null) {
+            return ResponseEntity.ok(atualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
