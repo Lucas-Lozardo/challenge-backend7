@@ -57,10 +57,8 @@ public class DepoimentoService {
 
     // DELETE FOR ID
     public void apagarDepoimentoPorId(Long id){
-        Optional<Depoimento> depoimento = repository.findById(id);
-        if (depoimento.isPresent()){
-            depoimento.ifPresent(repository::delete);
-        }
+        repository.findById(id).ifPresent(repository::delete);
+
     }
 
     // DELETE FOR NAME
