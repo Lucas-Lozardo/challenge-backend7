@@ -6,7 +6,6 @@ import com.lucaslozardo.challenge_backend7.repository.DepoimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +16,7 @@ public class DepoimentoService {
     @Autowired
     private DepoimentoRepository repository;
 
+    //CONVERSOR DE DEPOIMENTOS EM DTO
     public List<DepoimentoDTO> converteDadosDTO(List<Depoimento> depoimentos){
         return depoimentos.stream()
                 .map(d -> new DepoimentoDTO(d.getId(), d.getName(), d.getDepoimento(), d.getUrlFoto()))
@@ -50,23 +50,29 @@ public class DepoimentoService {
 
     // DELETE ALL
     public void apagarTodosOsDepoimentos(){
-        repository.deleteAll();
+        if(repository.count() > 0){
+            repository.deleteAll();
+        }
     }
 
     // DELETE FOR ID
     public void apagarDepoimentoPorId(Long id){
         Optional<Depoimento> depoimento = repository.findById(id);
-        depoimento.ifPresent(repository::delete);
+        if (depoimento.isPresent()){
+            depoimento.ifPresent(repository::delete);
+        }
     }
 
     // DELETE FOR NAME
     public void apagarDepoimentosPorNome(String name){
         List<Depoimento> depoimentos = repository.findByNameContainingIgnoringCase(name);
-        repository.deleteAll(depoimentos);
+        if (!depoimentos.isEmpty()){
+            repository.deleteAll(depoimentos);
+        }
     }
 
     // POST DEPOIMENTO
-    public Depoimento InserirNovoDepoimento (DepoimentoDTO dto){
+    public Depoimento inserirNovoDepoimento (DepoimentoDTO dto){
         Depoimento novoDepoimento = new Depoimento(dto.name(), dto.depoimento(), dto.urlFoto());
         return repository.save(novoDepoimento);
     }

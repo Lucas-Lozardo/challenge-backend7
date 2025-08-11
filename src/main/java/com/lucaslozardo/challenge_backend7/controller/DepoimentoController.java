@@ -49,7 +49,7 @@ public class DepoimentoController {
 
     @PostMapping
     public ResponseEntity<DepoimentoDTO> inserirDepoimento(@RequestBody DepoimentoDTO dto){
-        Depoimento depoimentoSalvo = depoimentoService.InserirNovoDepoimento(dto);
+        Depoimento depoimentoSalvo = depoimentoService.inserirNovoDepoimento(dto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new DepoimentoDTO(depoimentoSalvo));

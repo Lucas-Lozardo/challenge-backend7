@@ -10,4 +10,5 @@ import java.util.List;
 public interface DepoimentoRepository extends JpaRepository<Depoimento, Long> {
 
     List<Depoimento> findByNameContainingIgnoringCase(String name);
+
 }
