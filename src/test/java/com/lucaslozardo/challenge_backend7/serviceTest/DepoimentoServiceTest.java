@@ -220,4 +220,52 @@ public class DepoimentoServiceTest {
         //ASSERT
         verify(repositoryMock, never()).deleteAll();
     }
+
+    @Test
+    public void testarInserirNovoDepoimento(){
+        //ARRANGE
+        Depoimento novoDepoimento = new Depoimento("João", "Depoimento teste", "urlFoto");
+        novoDepoimento.setId(1L);
+        List<Depoimento> lista = List.of(novoDepoimento);
+        List<DepoimentoDTO> novoDepoimentoDTO = service.converteDadosDTO(lista);
+
+        //ACT
+        service.inserirNovoDepoimento(novoDepoimentoDTO.get(0));
+
+        //ASSERT
+        verify(repositoryMock, times(1)).save(any(Depoimento.class));
+    }
+
+    @Test
+    public void testarAtualizarDepoimentoPeloId_QuandoExistir(){
+        //ARRANGE
+        Depoimento depoimento = new Depoimento("João", "Depoimento teste", "urlFoto");
+        depoimento.setId(1L);
+
+        when(repositoryMock.findById(1L)).thenReturn(Optional.of(depoimento));
+        when(repositoryMock.save(any(Depoimento.class))).thenReturn(depoimento);
+
+        //ACT
+        Optional<Depoimento> depoimentoExistente = repositoryMock.findById(1L);
+        Depoimento atualizado = repositoryMock.save(depoimentoExistente.get());
+
+        //ASSERT
+        assertNotNull(atualizado);
+        assertEquals("João", atualizado.getName());
+        verify(repositoryMock, times(1)).findById(1L);
+        verify(repositoryMock, times(1)).save(any(Depoimento.class));
+    }
+
+    @Test
+    public void testarAtualizarDepoimentoPeloId_QuandoNaoExistir(){
+        //ARRANGE
+        when(repositoryMock.findById(1L)).thenReturn(Optional.empty());
+
+        //ACT
+        Optional<Depoimento> depoimento = repositoryMock.findById(1L);
+
+        //ASSERT
+        verify(repositoryMock, times(1)).findById(1L);
+        verify(repositoryMock, times(0)).save(any());
+    }
 }
